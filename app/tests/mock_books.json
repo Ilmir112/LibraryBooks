@@ -1,0 +1,24 @@
+[
+    {
+        "title": "Книга",
+        "author": "автор",
+        "year_publication": 2025,
+        "isbn": "1253-1549-25697",
+        "count_books": 25
+    },
+    {
+        "title": "Книга2",
+        "author": "автор2",
+        "year_publication": 2021,
+        "isbn": null,
+        "count_books": 25
+    },
+    {
+        "title": "Книга3",
+        "author": "автор3",
+        "year_publication": 2021,
+        "isbn": "1253-1549-256-25",
+        "count_books": 2
+    }
+
+]

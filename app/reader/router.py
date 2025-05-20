@@ -14,7 +14,7 @@ from app.users.dependencies import get_current_user
 from app.users.models import Users
 
 router = APIRouter(
-    prefix="/reader",
+    prefix="/readers",
     tags=["Читатели"],
 )
 

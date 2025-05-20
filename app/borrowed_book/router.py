@@ -29,8 +29,8 @@ async def get_all_books(user: Users = Depends(get_current_user)):
         return await BorrowedDAO.find_all()
 
 
-@router.get("/all_borrowed_book_by_returning_null")
-async def get_all_books_by_returning_null(
+@router.get("/all_borrowed_book_not_returned")
+async def get_all_borrowed_book_not_returned(
         reader_id: int, current_user: Users = Depends(get_current_user)
 ):
     active_borrows = await BorrowedDAO.find_all(reader_id=reader_id, return_date=None)

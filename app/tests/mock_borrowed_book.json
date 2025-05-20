@@ -1,0 +1,8 @@
+[
+  {
+    "book_id": 1,
+    "reader_id": 1,
+    "borrow_date": "2025-03-25",
+    "return_date": null
+  }
+]
