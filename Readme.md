@@ -1,4 +1,4 @@
-Описание проекта
+# Описание проекта
 Данный API позволяет:
 
 Регистрацию и вход библиотекарей (пользователей) с JWT-аутентификацией.
@@ -9,7 +9,7 @@
 Получение списка всех книг и книг, взятых конкретным читателем.
 
 
-Installation and usage
+# Установка и пользование
 
 Installation
 
@@ -20,13 +20,13 @@ cd LibraryBooks
  
 python -m venv env
 source env/bin/activate  # Linux/Mac
-# или
+или
 env\Scripts\activate  # Windows
 
 pip install -r requirements.txt
 
-Регистрация пользователя (библиотекаря):
-# POST /auth/register
+# Регистрация пользователя (библиотекаря):
+POST /auth/register
 Регистрацию и вход библиотекарей (пользователей) с использованием JWT-аутентификации:
 -Безопасность доступа JWT (JSON Web Token)
 -Удобство использования
@@ -44,7 +44,7 @@ POST /auth/register
 пароль захэширован. 
 после входа выдается токен JWT с доступом на 30минут
 
-Вход и получение токена:
+# Вход и получение токена:
 POST /auth/login
 
  Формы запроса:
@@ -54,23 +54,23 @@ POST /auth/login
 }
 Ответ содержит access_token.
 
-Управление книгами:
+# Управление книгами:
 POST /books/add_books
 GET /books/find_one_book
 PUT /books/update_books
 DELETE /books/delete
 
-Получение всех книг:
+# Получение всех книг:
 GET /books/all_books
 
-Управление читателями:
+# Управление читателями:
 POST /readers/add_reader
 GET /readers/all_reader
 GET /readers/find_one_reader
 PUT /readers/update_readers
 DELETE /readers/delete
 
-Выдача книги:
+# Выдача книги:
 POST /borrowed_book/issue_book
 {
   "book_id": 1,
@@ -83,7 +83,7 @@ POST /borrowed_book/issue_book
 В обратном случае выдается исключение FindBookAndReaderException.
  
 
-Возврат книги:
+# Возврат книги:
 POST /borrowed_book/returning_books
  
 {
@@ -93,10 +93,10 @@ POST /borrowed_book/returning_books
 Перед возвращением книги идет проверка получал ли этот пользователь (проверка по id) конкретно эту книгу.
 Только этого книга обратно принимается и ставится запись возврата. Запись выдачи не удаляется.
 
-Получение книг конкретного читателя:
+# Получение книг конкретного читателя:
 GET /borrowed_book/all_borrowed_book
 
-Возвращает список всех книг по записи
+# Возвращает список всех книг по записи
 
 Получение книг конкретного читателя:
 GET /borrowed_book/all_borrowed_book_not_returned
@@ -109,7 +109,7 @@ GET /borrowed_book/all_borrowed_book_not_returned
 хэшированным паролем из базы данных. При успешной проверке создаётся JWT-токен с истечением срока через 30 минут, 
 который возвращается пользователю для последующих запросов.
 
-Творческая часть: 
+# Творческая часть: 
 Так же в проект я бы добавил, отправку сообщение через фоновые задачи и кэширование либо электронную почту или 
 в telegram через 10 дней после получения книги до момента возврата.
 
