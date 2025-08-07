@@ -10,9 +10,9 @@ class SBooks(BaseModel):
     title: str = Field(..., description="Название книги")
     author: str = Field(..., description="Автор книги")
     year_publication: Optional[int] = Field(None, description="Год публикации")
-    isbn: Optional[str] = Field(None,  description="ISBN книги")
+    isbn: Optional[str] = Field(None, description="ISBN книги")
     count_books: Optional[int] = Field(1, ge=0, description="Количество экземпляров")
-    description: Optional[str] = Field(None,  description="Описание")
+    description: Optional[str] = Field(None, description="Описание")
 
     @field_validator("year_publication")
     def check_year_format(cls, v):

@@ -18,8 +18,7 @@ def test_one():
     ],
 )
 async def test_add_books(
-        title, author, year_publication, isbn, count_books,
-        authenticated_ac: AsyncClient
+    title, author, year_publication, isbn, count_books, authenticated_ac: AsyncClient
 ):
     new_book = await BookDAO.add(
         title=title,

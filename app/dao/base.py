@@ -33,7 +33,6 @@ class BaseDAO:
                 await session.commit()
                 return result.mappings().first()
 
-
         except (SQLAlchemyError, Exception) as e:
             if isinstance(e, SQLAlchemyError):
                 msg = "Database Exc: Cannot insert data into table"

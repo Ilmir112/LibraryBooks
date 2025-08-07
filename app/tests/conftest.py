@@ -60,7 +60,7 @@ async def prepare_database():
 async def ac():
     "Асинхронный клиент для тестирования эндпоинтов"
     async with AsyncClient(
-            transport=ASGITransport(app=fastapi_app), base_url="http://test"
+        transport=ASGITransport(app=fastapi_app), base_url="http://test"
     ) as ac:
         yield ac
 
@@ -69,7 +69,7 @@ async def ac():
 async def authenticated_ac():
     "Асинхронный аутентифицированный клиент для тестирования эндпоинтов"
     async with AsyncClient(
-            transport=ASGITransport(app=fastapi_app), base_url="http://test"
+        transport=ASGITransport(app=fastapi_app), base_url="http://test"
     ) as ac:
         await ac.post(
             "/auth/login",
@@ -78,11 +78,12 @@ async def authenticated_ac():
         # assert ac.cookies["books_access_token"]
         yield ac
 
+
 @pytest.fixture(scope="session")
 async def authenticated_ac_not():
     "Асинхронный аутентифицированный клиент для тестирования эндпоинтов"
     async with AsyncClient(
-            transport=ASGITransport(app=fastapi_app), base_url="http://test"
+        transport=ASGITransport(app=fastapi_app), base_url="http://test"
     ) as ac:
         await ac.post(
             "/auth/login",

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.exceptions import (
     CannotAddDataToDatabase,
@@ -7,6 +8,7 @@ from app.exceptions import (
     UpdateNotDataToDatabase,
     UserAlreadyExistsException,
 )
+from app.logger import logger
 from app.users.auth import (
     authenticate_user,
     create_access_token,
@@ -29,15 +31,46 @@ router_users = APIRouter(
 )
 
 
+@router_users.get("/all_users")
+async def read_users_all(current_user: Users = Depends(get_current_user)):
+    try:
+        if current_user:
+            result = await UserDAO.find_all()
+            return result
+    except SQLAlchemyError as db_err:
+        msg = f"Database Exception add book {db_err}"
+        logger.error(
+            msg,
+            extra={"current_user": current_user},
+            exc_info=True,
+        )
+    except Exception as e:
+        msg = f"Unexpected error: {str(e)}"
+        logger.error(
+            msg,
+            extra={"current_user": current_user},
+            exc_info=True,
+        )
+
+
 @router_auth.post("/register", status_code=201)
 async def register_user(user_data: SUserAuth):
-    existing_user = await UserDAO.find_one_or_none(email=user_data.email)
-    if existing_user:
-        raise UserAlreadyExistsException
-    hashed_password = get_password_hash(user_data.password)
-    new_user = await UserDAO.add(email=user_data.email, hashed_password=hashed_password)
-    if not new_user:
-        raise CannotAddDataToDatabase
+    try:
+        existing_user = await UserDAO.find_one_or_none(email=user_data.email)
+        if existing_user:
+            raise UserAlreadyExistsException
+        hashed_password = get_password_hash(user_data.password)
+        new_user = await UserDAO.add(email=user_data.email, hashed_password=hashed_password)
+        if not new_user:
+            raise CannotAddDataToDatabase
+    except SQLAlchemyError as db_err:
+        msg = f"Database Exception registration {db_err}"
+        logger.error(msg, extra={"current_user": user_data}, exc_info=True)
+    except Exception as e:
+        msg = f"Unexpected error: {str(e)}"
+        logger.error(msg, extra={"current_user": user_data}, exc_info=True)
+
+
 
 
 @router_auth.post("/login")
@@ -53,13 +86,6 @@ async def logout_user(response: Response):
     response.delete_cookie("library_access_token")
 
 
-@router_users.get("/all_users")
-async def read_users_all(current_user: Users = Depends(get_current_user)):
-    if current_user:
-        result = await UserDAO.find_all()
-        return result
-
-
 @router_users.get("/me")
 async def read_users_me(current_user: Users = Depends(get_current_user)):
     return current_user
@@ -69,20 +95,34 @@ async def read_users_me(current_user: Users = Depends(get_current_user)):
 async def update_user_data(
     user_data: SUserAuth, current_user: Users = Depends(get_current_user)
 ):
+    try:
+        if (
+            verify_password(user_data.password, current_user.hashed_password)
+            and user_data.email == current_user.email
+        ):
+            raise UpdateNotDataToDatabase
+        hashed_password = get_password_hash(user_data.password)
 
-    if (
-        verify_password(user_data.password, current_user.hashed_password)
-        and user_data.email == current_user.email
-    ):
-        raise UpdateNotDataToDatabase
-    hashed_password = get_password_hash(user_data.password)
-
-    new_user_data = await UserDAO.update_data(
-        current_user, email=user_data.email, hashed_password=hashed_password
-    )
-    if not new_user_data:
-        raise CannotUpdateDataToDatabase
-    raise UpdateDataToDatabase
+        new_user_data = await UserDAO.update_data(
+            current_user, email=user_data.email, hashed_password=hashed_password
+        )
+        if not new_user_data:
+            raise CannotUpdateDataToDatabase
+        raise UpdateDataToDatabase
+    except SQLAlchemyError as db_err:
+        msg = f"Database Exception add book {db_err}"
+        logger.error(
+            msg,
+            extra={"user_data": user_data},
+            exc_info=True,
+        )
+    except Exception as e:
+        msg = f"Unexpected error: {str(e)}"
+        logger.error(
+            msg,
+            extra={"user_data": user_data},
+            exc_info=True,
+        )
 
 
 @router_users.post("/delete")

@@ -5,12 +5,12 @@ from os.path import abspath, dirname
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.books.models import Books #noqa
-from app.borrowed_book.models import BorrowedBook #noqa
+from app.books.models import Books  # noqa
+from app.borrowed_book.models import BorrowedBook  # noqa
 from app.config import settings
 from app.database import Base
-from app.reader.models import Readers #noqa
-from app.users.models import Users #noqa
+from app.reader.models import Readers  # noqa
+from app.users.models import Users  # noqa
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 # this is the Alembic Config object, which provides
@@ -74,9 +74,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

@@ -5,8 +5,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(env_file = ".env")
-    # model_config = ConfigDict(env_file="../.env")
+    model_config = ConfigDict(env_file=".env")
 
     MODE: Literal["DEV", "TEST", "PROD"]
     LOG_LEVEL: str
@@ -16,11 +15,14 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+    POSTGRES_PASSWORD: str
 
     @property
     def DATABASE_URL(self):
-        return (f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@"
-                f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
+        return (
+            f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@"
+            f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        )
 
     TEST_DB_HOST: str
     TEST_DB_PORT: int

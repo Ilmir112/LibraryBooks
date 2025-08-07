@@ -83,16 +83,6 @@ class BooksCannotNullBeBooked(BooksException):
     detail = "Не удалось принять книгу так как книга не получена данным пользователем"
 
 
-class DateFromCannotBeAfterDateTo(BooksException):
-    status_code = status.HTTP_400_BAD_REQUEST
-    detail = "Дата заезда не может быть позже даты выезда"
-
-
-class CannotBookHotelForLongPeriod(BooksException):
-    status_code = status.HTTP_400_BAD_REQUEST
-    detail = "Невозможно забронировать отель сроком более месяца"
-
-
 class CannotAddDataToDatabase(BooksException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     detail = "Не удалось добавить запись"
@@ -104,7 +94,7 @@ class CannotUpdateDataToDatabase(BooksException):
 
 
 class UpdateNotDataToDatabase(BooksException):
-    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    status_code = status.HTTP_409_CONFLICT
     detail = "Пароль и логин совпадают с предыдущим"
 
 
@@ -115,7 +105,7 @@ class UpdateDataToDatabase(BooksException):
 
 class MultipleDataToDatabase(BooksException):
     status_code = status.HTTP_200_OK
-    detail = "Multiple readers found, additional parameters needed"
+    detail = "Найдено несколько читателей, должен быть только один"
 
 
 class BooksDeleteToDatabase(BooksException):
